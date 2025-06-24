@@ -7,7 +7,7 @@ const HomeScreen = () => {
   ]);
 
   useEffect(() => {
-    fetch('http://192.168.29.94:5000/generate-ai-summary', {
+    fetch('http://YOUR IP ADDRESS:5000/generate-ai-summary', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
