@@ -1,12 +1,19 @@
-FROM python:3.13.3-slim
+FROM python:3.11-slim
 
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt && pip install uvicorn
+# Install git (required for pip if installing from GitHub)
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
+# Install requirements
+COPY requirements.txt /app/
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy app source code
 COPY . /app
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]
+# Run FastAPI on port 5000
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]
