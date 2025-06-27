@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from db.database import engine, Base
-from routers import users
+from routers.authentication import users
  
 app = FastAPI()
 

@@ -1,0 +1,21 @@
+services:
+  db:
+    container_name: walletMate-postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: walletmate
+      POSTGRES_USER: aymanhaque
+      POSTGRES_PASSWORD: walletmate2025
+      PGDATA: /data/postgres
+    volumes:
+      - db:/data/postgresf
+    ports:
+      - "5332:5432"
+    networks:
+      - db
+    restart: unless-stopped
+networks:
+  db:
+    driver: bridge
+volumes:
+  db:
