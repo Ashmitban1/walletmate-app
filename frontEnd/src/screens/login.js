@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from "react-native";
+import {login} from "../services/auth"
 
 export default function Login({ navigation }) {
     const [email, setEmail] = useState("");
@@ -7,15 +8,22 @@ export default function Login({ navigation }) {
     const [isEmailFocused, setIsEmailFocused] = useState(false); // Track focus state for email input
     const [isPasswordFocused, setIsPasswordFocused] = useState(false); // Track focus state for password input
 
-    const handleLogin = () => {
+    const handleLogin = async() => {
         if (!email || !password) {
             Alert.alert("Error", "Please enter both email and password");
             return;
         }
-        Alert.alert("Success", `Logged in with email: ${email}`);
-        // Reset fields
+        setEmail(email);
+        setPassword(password);
+        
+        const user = await login(email,password)
+        if(!user){
+            Alert.alert("Incorrect email or password")
+            return;
+        }
         setEmail("");
-        setPassword("");
+        setPassword("")
+        navigation.navigate("Home")
     };
 
     return (

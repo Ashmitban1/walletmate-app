@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from "react-native";
+import {createUser} from "../services/auth"
 
 export default function Signup({ navigation }) {
     const [name, setName] = useState(""); // Added state for name
@@ -9,16 +10,28 @@ export default function Signup({ navigation }) {
     const [isPasswordFocused, setIsPasswordFocused] = useState(false); // Track focus state for password input
     const [isNameFocused, setIsNameFocused] = useState(false); // Track focus state for Name input
 
-    const handleSignup = () => {
+    const handleSignup = async() => {
         if (!name || !email || !password) { // Check if name is also entered
             Alert.alert("Error", "Please enter name, email, and password");
             return;
         }
-        Alert.alert("Success", `Signed up with name: ${name}, email: ${email}`);
-        // Reset fields
+        setName(name);
+        setEmail(email);
+        setPassword(password);
+        
+        user = await createUser(name,email,password)
+        console.log("Not working")
+        if(!user){
+            Alert.alert("Email already exists")
+            return;
+        }
         setName("");
         setEmail("");
-        setPassword("");
+        setPassword("")
+
+
+        // Alert.alert("Success", `Signed up with name: ${name}, email: ${email}`);
+        navigation.navigate("Home")
     };
 
     return (

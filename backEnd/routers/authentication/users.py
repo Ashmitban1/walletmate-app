@@ -15,16 +15,18 @@ router = APIRouter(
 
 @router.post("/signup")
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    db_user = auth.check_email_exists(user.email, db)
-    if db_user:
-        print("Email already registered")
+    check = auth.check_email_exists(user.email, db)
+    if check:
         raise HTTPException(status_code=400, detail="Email already registered")
-    auth.create_user(user, db)
-    return {"message": "User created successfully", "user": {"email": user.email}}
+    response = auth.create_user(user, db)
+    return response
+# {"message": "User created successfully", "user": {"email": user.email}}
 
-@router.get("/login")
+
+@router.post("/login")
 def login(user: UserLogin , db: Session = Depends(get_db)):
     check = auth.check_login(user.email, user.password, db)
     if not check:
         raise HTTPException(status_code=400, detail="Email or Password Incorrect")
-    return {"message": "Login Successful"}
+    return check
+# {"message": "Login Successful"}
