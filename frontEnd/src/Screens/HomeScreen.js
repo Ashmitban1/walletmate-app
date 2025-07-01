@@ -22,7 +22,7 @@ const HomeScreen = () => {
 
   const baseUrl = Platform.OS === 'android'
     ? 'http://10.0.2.2:5000'
-    : 'http://192.168.1.200:5000';
+    : 'http://YOURIPADDRESS:5000';
 
 
   useEffect(() => {
