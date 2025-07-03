@@ -14,13 +14,20 @@ export default function Camera({ navigation }) {
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef<CameraView>(null);
   const [uri, setUri] = useState<string | null>(null);
-  const [mode, setMode] = useState<CameraMode>("picture");
+  // const [mode, setMode] = useState<CameraMode>("picture");
   const [facing, setFacing] = useState<CameraType>("back");
-  const [recording, setRecording] = useState(false);
 
   if (!permission) {
     return null;
   }
+
+  const goBack = () => {
+  if (navigation.canGoBack()) {
+    navigation.goBack();
+  } else {
+    navigation.navigate("Home");
+  }
+};
 
   if (!permission.granted) {
     return (
@@ -68,7 +75,6 @@ export default function Camera({ navigation }) {
       <CameraView
         style={styles.camera}
         ref={ref}
-        mode={mode}
         facing={facing}
         mute={false}
         responsiveOrientationWhenOrientationLocked
@@ -76,8 +82,15 @@ export default function Camera({ navigation }) {
         <View style={styles.shutterContainer}>
           {/* Background bar behind the buttons */}
           <View style={styles.shutterBackground} pointerEvents="none" />
-          <Pressable onPress={() => navigation.goBack()}>
-            <AntDesign name="arrowleft" size={32} color="white" />
+          <Pressable onPress={() => goBack()}>
+            {({ pressed }) => (
+              <AntDesign
+                name="arrowleft"
+                size={32}
+                color="white"
+                style={{ opacity: pressed ? 0.5 : 1 }}
+              />
+            )}
           </Pressable>
           <Pressable onPress={takePicture}>
             {({ pressed }) => (
@@ -93,7 +106,7 @@ export default function Camera({ navigation }) {
                   style={[
                     styles.shutterBtnInner,
                     {
-                      backgroundColor: mode === "picture" ? "white" : "red",
+                      backgroundColor: "white",
                     },
                   ]}
                 />
@@ -101,7 +114,14 @@ export default function Camera({ navigation }) {
             )}
           </Pressable>
           <Pressable onPress={toggleFacing}>
-            <FontAwesome6 name="camera-rotate" size={32} color="white" />
+            {({ pressed }) => (
+              <FontAwesome6
+                name="camera-rotate"
+                size={32}
+                color="white"
+                style={{ opacity: pressed ? 0.5 : 1 }}
+              />
+            )}
           </Pressable>
         </View>
       </CameraView>
